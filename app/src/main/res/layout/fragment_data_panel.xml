@@ -85,6 +85,6 @@
             android:autofillHints=""
             android:ems="10"
             android:hint="@string/hit_start_location_edit_text"
-            android:text="Time:" />
+            android:text="@string/time_text_view_text" />
     </LinearLayout>
 </LinearLayout>

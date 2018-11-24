@@ -1,7 +1,8 @@
 package denisimus_it.net.navigator;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,16 +22,17 @@ import denisimus_it.net.navigator.client.JsonReader;
 
 import static denisimus_it.net.navigator.client.AbstractSample.encodeParams;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, Runnable{
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, Runnable {
 
+    public static final String MY_LOG = "My_log";
     private GoogleMap mMap;
     private Thread thread;
-    private  String key;
+    private String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.fragment_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -56,13 +58,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
     @Override
     public void run() {
         ComputationOfARoute("Россия, Москва, улица Дениса Давыдова, 7", "Россия, Москва, улица Кульнева 3", key);
     }
 
-    public void ComputationOfARoute(String startPoint, String entdPoint, String key){
+    public void ComputationOfARoute(String startPoint, String entdPoint, String key) {
         final String baseUrl = "https://maps.googleapis.com/maps/api/directions/json";// путь к Geocoding API по
         // HTTP
         final Map<String, String> params = Maps.newLinkedHashMap();
@@ -76,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         params.put("key", key);
 
         final String url = baseUrl + '?' + encodeParams(params);// генерируем путь с параметрами
-        System.out.println(url); // Можем проверить что вернет этот путь в браузере
+        Log.d(MY_LOG, "ComputationOfARoute url: " + url); // Можем проверить что вернет этот путь в браузере
         final JSONObject response;// делаем запрос к вебсервису и получаем от него ответ
         try {
             response = JsonReader.read(url);
@@ -87,8 +88,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             final String distance = location.getJSONObject("distance").getString("text");
             final String transitTime = location.getJSONObject("duration").getString("text");
-
+            Log.d(MY_LOG, "ComputationOfARoute distance: " + distance + "\n" + "transitTime: " + transitTime);
             System.out.println(distance + "\n" + transitTime);
+
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }

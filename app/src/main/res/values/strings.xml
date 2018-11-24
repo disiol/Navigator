@@ -2,4 +2,14 @@
     <string name="app_name">Navigator</string>
     <string name="title_activity_maps">Map</string>
     <string name="google_maps_key">AIzaSyCK1BYAab3N7OKfy9wXAlgt60RFi8wcNfM</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="start_Location_Text_View_text">Location A</string>
+    <string name="end_location_text_view_text">Location B</string>
+    <string name="hit_start_location_edit_text">your street</string>
+    <string name="hit_end_location_edit_text">your street</string>
+    <string name="generate_road_button_text">Generate road</string>
+    <string name="distance_text_view_tex"> <b>Distance:</b></string>
+    <string name="time_text_view_text"><b>Time:</b></string>
 </resources>
