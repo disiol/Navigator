@@ -10,6 +10,6 @@
     <string name="hit_start_location_edit_text">your street</string>
     <string name="hit_end_location_edit_text">your street</string>
     <string name="generate_road_button_text">Generate road</string>
-    <string name="distance_text_view_tex"> <b>Distance:</b></string>
-    <string name="time_text_view_text"><b>Time:</b></string>
+    <string name="distance_text_view_tex"> <b>Distance: </b></string>
+    <string name="time_text_view_text"><b>Time: </b></string>
 </resources>

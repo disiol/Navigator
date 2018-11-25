@@ -103,16 +103,9 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
     }
 
     public void ComputationOfARoute(String startPoint, String entdPoint, String key) {
-        final String baseUrl = "https://maps.googleapis.com/maps/api/directions/json";// путь к Geocoding API по
-        // HTTP
-        final Map<String, String> params = Maps.newLinkedHashMap();
-        params.put("sensor", "false");// указывает, исходит ли запрос на геокодирование от устройства с датчиком
-        params.put("language", "ru");// язык данные на котором мы хочем получить
-        params.put("mode", "walking");// способ перемещения, может быть driving, walking, bicycling
-        params.put("origin", startPoint);// адрес или текстовое значение широты и
-        // отправного пункта маршрута
-        params.put("destination", entdPoint);// адрес или текстовое значение широты и долготы долготы конечного пункта маршрута
-        params.put("key", key); //ключ проекта
+        final String baseUrl = "https://maps.googleapis.com/maps/api/directions/json";
+
+        final Map<String, String> params = setParams("false", "ru", "walking", startPoint, entdPoint, key);
 
         final String url = baseUrl + '?' + encodeParams(params);// генерируем путь с параметрами
         Log.d(MY_LOG, "ComputationOfARoute url: " + url); // Можем проверить что вернет этот путь в браузере
@@ -141,6 +134,18 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         }
 
 
+    }
+
+    @NonNull
+    private Map<String, String> setParams(String sensorStatus, String language, String mode, String startPoint, String entdPoint, String key) {
+        final Map<String, String> params = Maps.newLinkedHashMap();
+        params.put("sensor", sensorStatus);// указывает, исходит ли запрос на геокодирование от устройства с датчиком
+        params.put("language", language);// язык данные на котором мы хочем получить
+        params.put("mode", mode);// способ перемещения, может быть driving, walking, bicycling
+        params.put("origin", startPoint);// адрес или текстовое значение широты и
+        params.put("destination", entdPoint);// адрес или текстовое значение широты и долготы долготы конечного пункта маршрута
+        params.put("key", key); //ключ проекта
+        return params;
     }
 
 
