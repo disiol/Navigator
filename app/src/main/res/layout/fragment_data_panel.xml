@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragmentDataPanel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <LinearLayout
 
@@ -43,10 +45,10 @@
             android:gravity="center"
             android:hint="@string/hit_start_location_edit_text"
             android:inputType="text"
-            android:text="" />
+            android:text="Россия, Москва, улица Дениса Давыдова, 7" />
 
         <EditText
-            android:id="@+id/editTextLocationBInput"
+            android:id="@+id/endtLocationEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="50"
@@ -54,11 +56,11 @@
             android:gravity="center"
             android:hint="@string/hit_end_location_edit_text"
             android:inputType="text"
-            android:text="" />
+            android:text="Россия, Москва, улица Кульнева 3" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/GenerateRoadButton"
+        android:id="@+id/generateRoadButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/generate_road_button_text" />
