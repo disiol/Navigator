@@ -68,28 +68,29 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
     public void onClick(View v) {
         startPoint = startLocationEditText.getText().toString();
         entdPoint = endtLocationEditText.getText().toString();
-         //TODO dcok buton
-        thread.interrupt();
-        thread.start();
+        //TODO dcok buton
+        if (!thread.isAlive()) {
+            thread.start();
+        } else if (thread.isAlive()) {
+            thread.interrupt();
+        }
+
 
     }
-
-
 
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            Object rd = msg.obj;
-            Log.d(MY_LOG, "rd: " + rd);
+            Map answer = (Map) msg.obj;
+
+            Log.d(MY_LOG, "answer: " + answer);
 
 
-            String distance;
-            String time;
-            distanceTextView.setText(getString(R.string.distance_text_view_tex) + rd);
-//            timeTextView.setText(getString(R.string.time_text_view_text) + time);
-
-
+            Object distance = answer.get("distance");
+            Object transitTime = answer.get("transitTime");
+            distanceTextView.setText(getString(R.string.distance_text_view_tex) + distance);
+            timeTextView.setText(getString(R.string.time_text_view_text) + transitTime);
 
 
         }
@@ -110,9 +111,8 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         params.put("mode", "walking");// способ перемещения, может быть driving, walking, bicycling
         params.put("origin", startPoint);// адрес или текстовое значение широты и
         // отправного пункта маршрута
-        params.put("destination", entdPoint);// адрес или текстовое значение широты и долготы
-        // долготы конечного пункта маршрута
-        params.put("key", key);
+        params.put("destination", entdPoint);// адрес или текстовое значение широты и долготы долготы конечного пункта маршрута
+        params.put("key", key); //ключ проекта
 
         final String url = baseUrl + '?' + encodeParams(params);// генерируем путь с параметрами
         Log.d(MY_LOG, "ComputationOfARoute url: " + url); // Можем проверить что вернет этот путь в браузере
@@ -127,12 +127,15 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
             final String distance = location.getJSONObject("distance").getString("text");
             final String transitTime = location.getJSONObject("duration").getString("text");
             Log.d(MY_LOG, "ComputationOfARoute distance: " + distance + "\n" + "transitTime: " + transitTime);
-            Map<String,String> answer = new LinkedHashMap<>();
-            answer.put("distance",distance);
-            answer.put("transitTime",transitTime);
+
+            Map<String, String> answer = new LinkedHashMap<>();
+            answer.put("distance", distance);
+            answer.put("transitTime", transitTime);
 
             Message message = handler.obtainMessage(0, 0, 0, answer);
             handler.sendMessage(message);
+
+            //TODO close trend
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
