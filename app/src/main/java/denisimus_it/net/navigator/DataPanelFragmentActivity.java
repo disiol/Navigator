@@ -35,7 +35,7 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
     private Thread thread;
     private String key;
     private Button generateRoadButton;
-    private EditText startLocationEditText, endtLocationEditText;
+    private EditText startLocationEditText, endLocationEditText;
     private TextView distanceTextView, timeTextView;
 
     private String startPoint;
@@ -48,11 +48,10 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         View dataPanelView = inflater.inflate(R.layout.fragment_data_panel, container, false);
 
         key = getString(R.string.google_maps_key);
-        thread = new Thread(this);
 
         generateRoadButton = dataPanelView.findViewById(R.id.generateRoadButton);
         startLocationEditText = dataPanelView.findViewById(R.id.startLocationEditText);
-        endtLocationEditText = dataPanelView.findViewById(R.id.endtLocationEditText);
+        endLocationEditText = dataPanelView.findViewById(R.id.endtLocationEditText);
         distanceTextView = dataPanelView.findViewById(R.id.distanceTextView);
         timeTextView = dataPanelView.findViewById(R.id.timeTextView);
 
@@ -66,15 +65,16 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
     @Override
     public void onClick(View v) {
-        startPoint = startLocationEditText.getText().toString();
-        entdPoint = endtLocationEditText.getText().toString();
-        //TODO dcok buton
-        if (!thread.isAlive()) {
-            thread.start();
-        } else if (thread.isAlive()) {
-            thread.interrupt();
-        }
 
+        distanceTextView.setText(getString(R.string.distance_text_view_tex));
+        timeTextView.setText(getString(R.string.time_text_view_text));
+        thread = new Thread(this);
+
+        startPoint = startLocationEditText.getText().toString();
+        entdPoint = endLocationEditText.getText().toString();
+        //TODO lcok buton
+
+        thread.start();
 
     }
 
@@ -98,40 +98,18 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
     @Override
     public void run() {
-
         ComputationOfARoute(startPoint, entdPoint, key);
+
     }
 
-    public void ComputationOfARoute(String startPoint, String entdPoint, String key) {
+    private void ComputationOfARoute(String startPoint, String entdPoint, String key) {
         final String baseUrl = "https://maps.googleapis.com/maps/api/directions/json";
 
         final Map<String, String> params = setParams("false", "ru", "walking", startPoint, entdPoint, key);
-
         final String url = baseUrl + '?' + encodeParams(params);// генерируем путь с параметрами
+
         Log.d(MY_LOG, "ComputationOfARoute url: " + url); // Можем проверить что вернет этот путь в браузере
-        final JSONObject response;// делаем запрос к вебсервису и получаем от него ответ
-        try {
-            response = JsonReader.read(url);
-            // как правило наиболее подходящий ответ первый и данные о кординатах можно получить по пути
-            // //results[0]/geometry/location/lng и //results[0]/geometry/location/lat
-            JSONObject location = response.getJSONArray("routes").getJSONObject(0);
-            location = location.getJSONArray("legs").getJSONObject(0);
-
-            final String distance = location.getJSONObject("distance").getString("text");
-            final String transitTime = location.getJSONObject("duration").getString("text");
-            Log.d(MY_LOG, "ComputationOfARoute distance: " + distance + "\n" + "transitTime: " + transitTime);
-
-            Map<String, String> answer = new LinkedHashMap<>();
-            answer.put("distance", distance);
-            answer.put("transitTime", transitTime);
-
-            Message message = handler.obtainMessage(0, 0, 0, answer);
-            handler.sendMessage(message);
-
-            //TODO close trend
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
+        requestToWebServer(url);
 
 
     }
@@ -146,6 +124,45 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         params.put("destination", entdPoint);// адрес или текстовое значение широты и долготы долготы конечного пункта маршрута
         params.put("key", key); //ключ проекта
         return params;
+    }
+
+    private void requestToWebServer(String url) {
+        final JSONObject response;// делаем запрос к вебсервису и получаем от него ответ
+        try {
+            response = JsonReader.read(url);
+            Log.d(MY_LOG, "response: ");
+            JSONObject routes = response.getJSONArray("routes").getJSONObject(0);
+            JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+            routes = routes.getJSONArray("legs").getJSONObject(0);
+
+            final String distance = legs.getJSONObject("distance").getString("text");
+            final String transitTime = legs.getJSONObject("duration").getString("text");
+
+            final String startPointLat = legs.getJSONObject("start_location").getString("lat");
+            final String startPointLng = legs.getJSONObject("start_location").getString("lng");
+
+            final String endPointLat = legs.getJSONObject("end_location").getString("lat");
+            final String endPointLng = legs.getJSONObject("end_location").getString("lng");
+
+
+            Log.d(MY_LOG, "ComputationOfARoute distance: " + distance + "\n" + "transitTime: " + transitTime);
+
+            Map<String, String> answer = new LinkedHashMap<>();
+            answer.put("distance", distance);
+            answer.put("transitTime", transitTime);
+            answer.put("startPointLat", startPointLat);
+            answer.put("startPointLng", startPointLng);
+            answer.put("endPointLat", endPointLat);
+            answer.put("endPointLng", endPointLng);
+
+            Message message = handler.obtainMessage(0, 0, 0, answer);
+            handler.sendMessage(message);
+
+            //TODO close trend
+        } catch (IOException | JSONException e) {
+            Log.e(MY_LOG, e.toString());
+            e.printStackTrace();
+        }
     }
 
 

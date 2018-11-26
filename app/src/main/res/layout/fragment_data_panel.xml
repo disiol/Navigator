@@ -40,11 +40,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="50"
-            android:autofillHints=""
             android:ems="10"
             android:gravity="center"
             android:hint="@string/hit_start_location_edit_text"
-            android:inputType="text"
+            android:inputType="text|textMultiLine"
             android:text="Россия, Москва, улица Дениса Давыдова, 7" />
 
         <EditText
@@ -55,7 +54,7 @@
             android:ems="10"
             android:gravity="center"
             android:hint="@string/hit_end_location_edit_text"
-            android:inputType="text"
+            android:inputType="text|textMultiLine"
             android:text="Россия, Москва, улица Кульнева 3" />
     </LinearLayout>
 
