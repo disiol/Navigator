@@ -1,6 +1,7 @@
 package denisimus_it.net.navigator;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -73,7 +74,6 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         startPoint = startLocationEditText.getText().toString();
         entdPoint = endLocationEditText.getText().toString();
         //TODO lcok buton
-
         thread.start();
 
     }
@@ -89,8 +89,22 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
             Object distance = answer.get("distance");
             Object transitTime = answer.get("transitTime");
+
+            String startPointLat = String.valueOf(answer.get("startPointLat"));
+            String startPointLng = String.valueOf(answer.get("startPointLng"));
+            String endPointLat = String.valueOf(answer.get("endPointLat"));
+            String endPointLng = String.valueOf(answer.get("endPointLng"));
+
+
             distanceTextView.setText(getString(R.string.distance_text_view_tex) + distance);
             timeTextView.setText(getString(R.string.time_text_view_text) + transitTime);
+
+            Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra("startPointLat",  startPointLat);
+            intent.putExtra("startPointLng", startPointLng);
+            intent.putExtra("endPointLat", endPointLat);
+            intent.putExtra("endPointLng", endPointLng);
+            getActivity().startActivity(intent);
 
 
         }
@@ -130,10 +144,9 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         final JSONObject response;// делаем запрос к вебсервису и получаем от него ответ
         try {
             response = JsonReader.read(url);
-            Log.d(MY_LOG, "response: ");
             JSONObject routes = response.getJSONArray("routes").getJSONObject(0);
+            Log.d(MY_LOG, "routes: " +  routes);
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
-            routes = routes.getJSONArray("legs").getJSONObject(0);
 
             final String distance = legs.getJSONObject("distance").getString("text");
             final String transitTime = legs.getJSONObject("duration").getString("text");
