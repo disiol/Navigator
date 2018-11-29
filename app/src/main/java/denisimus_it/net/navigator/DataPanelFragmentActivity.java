@@ -89,11 +89,6 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
             Object distance = answer.get("distance");
             Object transitTime = answer.get("transitTime");
-
-            String startPointLat = String.valueOf(answer.get("startPointLat"));
-            String startPointLng = String.valueOf(answer.get("startPointLng"));
-            String endPointLat = String.valueOf(answer.get("endPointLat"));
-            String endPointLng = String.valueOf(answer.get("endPointLng"));
             String points = String.valueOf(answer.get("points"));
 
 
@@ -102,10 +97,6 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
             timeTextView.setText(getString(R.string.time_text_view_text) + transitTime);
 
             Intent intent = new Intent(getActivity(), MapsActivity.class);
-            intent.putExtra("startPointLat", startPointLat);
-            intent.putExtra("startPointLng", startPointLng);
-            intent.putExtra("endPointLat", endPointLat);
-            intent.putExtra("endPointLng", endPointLng);
             intent.putExtra("points", points);
             getActivity().startActivity(intent);
 
@@ -154,15 +145,8 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
 
-
             final String distance = legs.getJSONObject("distance").getString("text");
             final String transitTime = legs.getJSONObject("duration").getString("text");
-
-            final String startPointLat = legs.getJSONObject("start_location").getString("lat");
-            final String startPointLng = legs.getJSONObject("start_location").getString("lng");
-
-            final String endPointLat = legs.getJSONObject("end_location").getString("lat");
-            final String endPointLng = legs.getJSONObject("end_location").getString("lng");
 
             final String points = routes.getJSONObject("overview_polyline").getString("points"); //TODO
             Log.d(MY_LOG, "points: " + points);
@@ -173,10 +157,6 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
             Map<String, String> answer = new LinkedHashMap<>();
             answer.put("distance", distance);
             answer.put("transitTime", transitTime);
-            answer.put("startPointLat", startPointLat);
-            answer.put("startPointLng", startPointLng);
-            answer.put("endPointLat", endPointLat);
-            answer.put("endPointLng", endPointLng);
             answer.put("points", points);
 
             Message message = handler.obtainMessage(0, 0, 0, answer);

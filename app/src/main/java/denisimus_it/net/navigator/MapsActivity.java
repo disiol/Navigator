@@ -39,9 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
-            //TODO
-            startPointLat = Float.valueOf(intent.getStringExtra("startPointLat"));
-            startPointLng = Float.valueOf(intent.getStringExtra("startPointLng"));
+            //TODO сохранить время и дистанцю
             endPointLat = Float.valueOf(intent.getStringExtra("endPointLat"));
             endPointLng = Float.valueOf(intent.getStringExtra("endPointLng"));
             points = PolyUtil.decode(intent.getStringExtra("points"));
