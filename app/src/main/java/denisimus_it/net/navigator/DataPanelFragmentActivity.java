@@ -94,16 +94,19 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
             String startPointLng = String.valueOf(answer.get("startPointLng"));
             String endPointLat = String.valueOf(answer.get("endPointLat"));
             String endPointLng = String.valueOf(answer.get("endPointLng"));
+            String points = String.valueOf(answer.get("points"));
 
 
+            //TODO
             distanceTextView.setText(getString(R.string.distance_text_view_tex) + distance);
             timeTextView.setText(getString(R.string.time_text_view_text) + transitTime);
 
             Intent intent = new Intent(getActivity(), MapsActivity.class);
-            intent.putExtra("startPointLat",  startPointLat);
+            intent.putExtra("startPointLat", startPointLat);
             intent.putExtra("startPointLng", startPointLng);
             intent.putExtra("endPointLat", endPointLat);
             intent.putExtra("endPointLng", endPointLng);
+            intent.putExtra("points", points);
             getActivity().startActivity(intent);
 
 
@@ -144,9 +147,13 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         final JSONObject response;// делаем запрос к вебсервису и получаем от него ответ
         try {
             response = JsonReader.read(url);
+            //   Log.d(MY_LOG, "response: " +  response);
+
             JSONObject routes = response.getJSONArray("routes").getJSONObject(0);
-            Log.d(MY_LOG, "routes: " +  routes);
+            Log.d(MY_LOG, "routes: " + routes);
+
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+
 
             final String distance = legs.getJSONObject("distance").getString("text");
             final String transitTime = legs.getJSONObject("duration").getString("text");
@@ -156,6 +163,9 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
             final String endPointLat = legs.getJSONObject("end_location").getString("lat");
             final String endPointLng = legs.getJSONObject("end_location").getString("lng");
+
+            final String points = routes.getJSONObject("overview_polyline").getString("points"); //TODO
+            Log.d(MY_LOG, "points: " + points);
 
 
             Log.d(MY_LOG, "ComputationOfARoute distance: " + distance + "\n" + "transitTime: " + transitTime);
@@ -167,6 +177,7 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
             answer.put("startPointLng", startPointLng);
             answer.put("endPointLat", endPointLat);
             answer.put("endPointLng", endPointLng);
+            answer.put("points", points);
 
             Message message = handler.obtainMessage(0, 0, 0, answer);
             handler.sendMessage(message);
