@@ -87,16 +87,17 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
             Log.d(MY_LOG, "answer: " + answer);
 
 
-            Object distance = answer.get("distance");
-            Object transitTime = answer.get("transitTime");
+            String distance = String.valueOf(answer.get("distance"));
+            String transitTime = String.valueOf(answer.get("transitTime"));
             String points = String.valueOf(answer.get("points"));
 
 
-            //TODO
-            distanceTextView.setText(getString(R.string.distance_text_view_tex) + distance);
-            timeTextView.setText(getString(R.string.time_text_view_text) + transitTime);
+//            distanceTextView.setText(getString(R.string.distance_text_view_tex) + distance);
+//            timeTextView.setText(getString(R.string.time_text_view_text) + transitTime);
 
             Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra("distance", distance);
+            intent.putExtra("transitTime", transitTime);
             intent.putExtra("points", points);
             getActivity().startActivity(intent);
 

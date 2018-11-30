@@ -2,8 +2,11 @@ package denisimus_it.net.navigator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,10 +25,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String MY_LOG = "My_log";
 
     private GoogleMap mMap;
-    private float startPointLat;
-    private float startPointLng;
-    private float endPointLat;
-    private float endPointLng;
+    private String distance;
+    private String transitTime;
     private List<LatLng> points = null;
 
     @Override
@@ -37,22 +38,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        getPoints();
+
+
+    }
+
+    private void getPoints() {
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
-            //TODO сохранить время и дистанцю
-            endPointLat = Float.valueOf(intent.getStringExtra("endPointLat"));
-            endPointLng = Float.valueOf(intent.getStringExtra("endPointLng"));
+//            distance = intent.getStringExtra("distance");
+//            transitTime = intent.getStringExtra("transitTime");
             points = PolyUtil.decode(intent.getStringExtra("points"));
 
-            Log.d(MY_LOG, "points: " + points.toString());
         }
-
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+
 
         PolylineOptions line = new PolylineOptions();
         line.width(4f);
@@ -77,6 +82,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLngBounds latLngBounds = latLngBuilder.build();
             CameraUpdate track = CameraUpdateFactory.newLatLngBounds(latLngBounds, size, size, 25);
             mMap.moveCamera(track);
+
+            getTextViewFromDataPanelFragmentActivity();
+
         }
+    }
+
+    private void getTextViewFromDataPanelFragmentActivity() {
+        Fragment dataPanelFragmentActivity = getSupportFragmentManager().findFragmentById(R.id.fragment2);
+        //TODO
+        if (dataPanelFragmentActivity != null) {
+            Intent intent = getIntentDataFromDataPanelFragmentActivity();
+
+            ((TextView) dataPanelFragmentActivity.getView().findViewById(R.id.distanceTextView)).
+                    setText(getString(R.string.distance_text_view_tex) + distance);
+
+            ((TextView) dataPanelFragmentActivity.getView().findViewById(R.id.timeTextView))
+                    .setText(getString(R.string.time_text_view_text) + transitTime);
+
+            if (intent.getExtras() != null) {
+                Log.d(MY_LOG, "getTextViewFromDataPanelFragmentActivity points: " + points.toString()
+                        + "distance: " + distance + " transitTime: " + transitTime);
+            }
+
+        }
+    }
+
+    @NonNull
+    private Intent getIntentDataFromDataPanelFragmentActivity() {
+        Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+            distance = intent.getStringExtra("distance");
+            transitTime = intent.getStringExtra("transitTime");
+        }
+        return intent;
     }
 }
