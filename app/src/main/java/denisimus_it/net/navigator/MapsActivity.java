@@ -46,8 +46,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getPoints() {
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
-//            distance = intent.getStringExtra("distance");
-//            transitTime = intent.getStringExtra("transitTime");
             String points = intent.getStringExtra("points");
             if (points != null) {
                 this.points = PolyUtil.decode(points);
