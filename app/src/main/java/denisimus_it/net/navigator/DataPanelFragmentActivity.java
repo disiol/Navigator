@@ -137,10 +137,9 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
     }
 
     private void requestToWebServer(String url) {
-        final JSONObject response;// делаем запрос к вебсервису и получаем от него ответ
+        JSONObject response = null;// делаем запрос к вебсервису и получаем от него ответ
         try {
             response = JsonReader.read(url);
-            //   Log.d(MY_LOG, "response: " +  response);
 
             JSONObject routes = response.getJSONArray("routes").getJSONObject(0);
             Log.d(MY_LOG, "routes: " + routes);
@@ -166,6 +165,15 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
             //TODO close trend
         } catch (IOException | JSONException e) {
+
+            try {
+                JSONObject error_message = response.getJSONObject("error_message");
+                JSONObject status = response.getJSONObject("error_message");
+                Log.e(MY_LOG, "error_message: "+ error_message  + "\n status: " + status);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+
             Log.e(MY_LOG, e.toString());
             e.printStackTrace();
         }
