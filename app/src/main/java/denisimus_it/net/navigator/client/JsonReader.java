@@ -20,6 +20,7 @@ public class JsonReader {
             final BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             final String jsonText = readAll(rd);
             final JSONObject json = new JSONObject(jsonText);
+            is.close();
             return json;
         } finally {
             is.close();

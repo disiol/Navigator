@@ -59,6 +59,7 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         generateRoadButton.setOnClickListener(this);
 
 
+
         return dataPanelView;
 
     }
@@ -66,13 +67,20 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
     @Override
     public void onClick(View v) {
-
+        Log.d(MY_LOG, "onClick DataPanelFragmentActivity: ");
+        thread = new Thread(this);
         distanceTextView.setText(getString(R.string.distance_text_view_tex));
         timeTextView.setText(getString(R.string.time_text_view_text));
-        thread = new Thread(this);
 
         startPoint = startLocationEditText.getText().toString();
         entdPoint = endLocationEditText.getText().toString();
+
+        Log.d(MY_LOG, "startPoint: " + startPoint + "entdPoint: " + entdPoint);
+//        try {
+//            thread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         //TODO lcok buton
         thread.start();
 

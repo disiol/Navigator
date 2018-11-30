@@ -48,7 +48,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (intent.getExtras() != null) {
 //            distance = intent.getStringExtra("distance");
 //            transitTime = intent.getStringExtra("transitTime");
-            points = PolyUtil.decode(intent.getStringExtra("points"));
+            String points = intent.getStringExtra("points");
+            if (points != null) {
+                this.points = PolyUtil.decode(points);
+            }
 
         }
     }
@@ -56,7 +59,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
 
 
         PolylineOptions line = new PolylineOptions();
@@ -89,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void getTextViewFromDataPanelFragmentActivity() {
-        Fragment dataPanelFragmentActivity = getSupportFragmentManager().findFragmentById(R.id.fragment2);
+        Fragment dataPanelFragmentActivity = getSupportFragmentManager().findFragmentById(R.id.fragment_data_panel);
         //TODO
         if (dataPanelFragmentActivity != null) {
             Intent intent = getIntentDataFromDataPanelFragmentActivity();

@@ -18,7 +18,7 @@
         android:layout_weight="25"/>
 
     <fragment
-        android:id="@+id/fragment2"
+        android:id="@+id/fragment_data_panel"
         android:name="denisimus_it.net.navigator.DataPanelFragmentActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
