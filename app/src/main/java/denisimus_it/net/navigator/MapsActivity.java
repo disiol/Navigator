@@ -65,7 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         PolylineOptions line = new PolylineOptions();
-        line.width(16f).color(R.color.colorPrimaryDark);
+        line.width(16f).color(R.color.colorAccent);
         LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
 
         if (points != null) {
