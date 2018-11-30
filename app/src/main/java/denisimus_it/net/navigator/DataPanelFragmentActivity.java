@@ -52,12 +52,11 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
 
         generateRoadButton = dataPanelView.findViewById(R.id.generateRoadButton);
         startLocationEditText = dataPanelView.findViewById(R.id.startLocationEditText);
-        endLocationEditText = dataPanelView.findViewById(R.id.endtLocationEditText);
+        endLocationEditText = dataPanelView.findViewById(R.id.endLocationEditText);
         distanceTextView = dataPanelView.findViewById(R.id.distanceTextView);
         timeTextView = dataPanelView.findViewById(R.id.timeTextView);
 
         generateRoadButton.setOnClickListener(this);
-
 
 
         return dataPanelView;
@@ -75,12 +74,8 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
         startPoint = startLocationEditText.getText().toString();
         entdPoint = endLocationEditText.getText().toString();
 
-        Log.d(MY_LOG, "startPoint: " + startPoint + "entdPoint: " + entdPoint);
-//        try {
-//            thread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+
+        Log.d(MY_LOG, "startPoint: " + startPoint + " entdPoint: " + entdPoint);
         //TODO lcok buton
         thread.start();
 
@@ -100,13 +95,12 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
             String points = String.valueOf(answer.get("points"));
 
 
-//            distanceTextView.setText(getString(R.string.distance_text_view_tex) + distance);
-//            timeTextView.setText(getString(R.string.time_text_view_text) + transitTime);
-
             Intent intent = new Intent(getActivity(), MapsActivity.class);
             intent.putExtra("distance", distance);
             intent.putExtra("transitTime", transitTime);
             intent.putExtra("points", points);
+            intent.putExtra("startPoint", startPoint);
+            intent.putExtra("entdPoint", entdPoint);
             getActivity().startActivity(intent);
 
 

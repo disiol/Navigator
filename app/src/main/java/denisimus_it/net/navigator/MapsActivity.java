@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -28,6 +29,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String distance;
     private String transitTime;
     private List<LatLng> points = null;
+    private String startPoint;
+    private String entdPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             String points = intent.getStringExtra("points");
+            startPoint = intent.getStringExtra("startPoint");
+            entdPoint = intent.getStringExtra("entdPoint");
             if (points != null) {
                 this.points = PolyUtil.decode(points);
             }
@@ -60,18 +65,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         PolylineOptions line = new PolylineOptions();
-        line.width(4f);
+        line.width(16f).color(R.color.colorPrimaryDark);
         LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
 
         if (points != null) {
             for (int i = 0; i < points.size(); i++) {
                 if (i == 0) {
                     MarkerOptions startMarkerOptions = new MarkerOptions()
-                            .position(points.get(i));
+                            .position(points.get(i)).title(startPoint);
                     mMap.addMarker(startMarkerOptions);
                 } else if (i == points.size() - 1) {
                     MarkerOptions endMarkerOptions = new MarkerOptions()
-                            .position(points.get(i));
+                            .position(points.get(i)).title(entdPoint);
                     mMap.addMarker(endMarkerOptions);
                 }
                 line.add(points.get(i));
@@ -99,6 +104,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             ((TextView) dataPanelFragmentActivity.getView().findViewById(R.id.timeTextView))
                     .setText(getString(R.string.time_text_view_text) + transitTime);
+
+            ((EditText) dataPanelFragmentActivity.getView().findViewById(R.id.startLocationEditText))
+                    .setText(startPoint);
+
+            ((EditText) dataPanelFragmentActivity.getView().findViewById(R.id.endLocationEditText))
+                    .setText(entdPoint);
+
+
+
 
             if (intent.getExtras() != null) {
                 Log.d(MY_LOG, "getTextViewFromDataPanelFragmentActivity points: " + points.toString()
