@@ -15,8 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity"
-        android:layout_weight="25"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_maps"
+        android:layout_weight="40"/>
 
     <fragment
         android:id="@+id/fragment_data_panel"
