@@ -166,13 +166,6 @@ public class DataPanelFragmentActivity extends Fragment implements Runnable, Vie
             //TODO close trend
         } catch (IOException | JSONException e) {
 
-            try {
-                JSONObject error_message = response.getJSONObject("error_message");
-                JSONObject status = response.getJSONObject("error_message");
-                Log.e(MY_LOG, "error_message: "+ error_message  + "\n status: " + status);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
 
             Log.e(MY_LOG, e.toString());
             e.printStackTrace();
